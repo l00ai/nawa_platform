@@ -9,8 +9,8 @@ class StoriesResponse{
 
   StoriesResponse({this.stories});
 
-  factory StoriesResponse.fromJson(Map<String, dynamic> json) =>
+  factory StoriesResponse.fromJson(List<dynamic> json) =>
       _$StoriesResponseFromJson(json);
 
-  Map<String, dynamic> toJson() => _$StoriesResponseToJson(this);
+  List<dynamic> toJson() => _$StoriesResponseToJson(this);
 }

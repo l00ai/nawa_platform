@@ -41,8 +41,11 @@ dependencies:
   flutter_inner_drawer: ^0.5.8
   cached_network_image: ^2.5.0
   shimmer: ^1.1.2
-  infinite_scroll_pagination: ^2.3.0
-  audioplayers: ^0.17.4
+  collection: ^1.14.13
+  youtube_player_flutter: ^7.0.0+7
+  audio_manager: ^0.7.3
+
+
 
 dev_dependencies:
   flutter_test:

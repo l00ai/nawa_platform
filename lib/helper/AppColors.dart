@@ -19,6 +19,8 @@ class AppColors {
   static const OrangeColor = Color(0xFFE6A901);
   static const GreenColor = Color(0xFF29AF51);
   static const TextColorDrawer = Color(0xFF4D4C4C);
+  static const bgMusicTileColor = Color(0xFFFCEEC9);
+  static const bgSchoolCurriculumCardColor = Color(0xFFFCF8EE);
 
 
   static const GradientColor_1 = Color(0xFF666666);

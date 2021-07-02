@@ -69,4 +69,45 @@ class _$PortalService extends PortalService {
     final $request = Request('GET', $url, client.baseUrl, parameters: $params);
     return client.send<StoriesResponse, StoriesResponse>($request);
   }
+
+  @override
+  Future<Response<StoriesResponse>> getHeritageAsType(String typeId) {
+    final $url = '/Heritage';
+    final $params = <String, dynamic>{'Type': typeId};
+    final $request = Request('GET', $url, client.baseUrl, parameters: $params);
+    return client.send<StoriesResponse, StoriesResponse>($request);
+  }
+
+  @override
+  Future<Response<StoriesResponse>> getHeritageQ(String q) {
+    final $url = '/Heritage';
+    final $params = <String, dynamic>{'q': q};
+    final $request = Request('GET', $url, client.baseUrl, parameters: $params);
+    return client.send<StoriesResponse, StoriesResponse>($request);
+  }
+
+  @override
+  Future<Response<StoriesResponse>> getHeritageForHome(
+      {String showInHome = '1'}) {
+    final $url = '/Heritage';
+    final $params = <String, dynamic>{'ShowInHome': showInHome};
+    final $request = Request('GET', $url, client.baseUrl, parameters: $params);
+    return client.send<StoriesResponse, StoriesResponse>($request);
+  }
+
+  @override
+  Future<Response<String>> subscriptions(Map<String, dynamic> body) {
+    final $url = '/Subscriptions';
+    final $body = body;
+    final $request = Request('POST', $url, client.baseUrl, body: $body);
+    return client.send<String, String>($request);
+  }
+
+  @override
+  Future<Response<String>> needHelp(Map<String, dynamic> body) {
+    final $url = '/NeedHelp';
+    final $body = body;
+    final $request = Request('POST', $url, client.baseUrl, body: $body);
+    return client.send<String, String>($request);
+  }
 }

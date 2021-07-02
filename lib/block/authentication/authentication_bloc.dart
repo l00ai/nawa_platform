@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -53,9 +54,11 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
       } else {
         yield AuthenticationNotAuthenticated(titles: _response);
       }
-    } catch (e) {
+    } on SocketException catch (e) {
       print(e);
-      yield AuthenticationFailure(message:'');
+      yield AuthenticationFailure(message: "لا يوجد إتصال بالانترنت !");
+    } catch (e){
+      yield AuthenticationFailure(message:e.message);
     }
   }
 

@@ -1,14 +1,24 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nawa_platform/helper/AppColors.dart';
-import 'package:nawa_platform/ui/widgets/app_par.dart';
+import 'package:nawa_platform/helper/common.dart';
+import 'package:nawa_platform/model/letter.dart';
+import 'package:nawa_platform/model/stories_response.dart';
+import 'package:nawa_platform/model/story.dart';
+import 'package:nawa_platform/repository/portal_repository.dart';
+import 'package:nawa_platform/ui/screen/story_cata_screen.dart';
+import 'package:nawa_platform/ui/widgets/heritage_list_item.dart';
+import 'package:nawa_platform/ui/widgets/music_list_item.dart';
 import 'package:nawa_platform/ui/widgets/story_list_item.dart';
 
 class StoryPlatformScreen extends StatefulWidget {
-  final String title ;
-  StoryPlatformScreen({this.title});
+  final titles ;
+  final int screenType;
+  StoryPlatformScreen({this.titles, this.screenType});
 
   @override
   _StoryPlatformScreenState createState() => _StoryPlatformScreenState();
@@ -16,37 +26,68 @@ class StoryPlatformScreen extends StatefulWidget {
 
 class _StoryPlatformScreenState extends State<StoryPlatformScreen > {
 
-  int _letterId;
-  List<Letter> _letters = [];
-  List<Letter> _searchType = [];
+  String _letterId = "أ" ;
+  String _searchTypeId = "الإسم" ;
+  List<Letter> _letters = Common().listOfLetter;
+  List<Letter> _searchType = Common().listSearchType;
+  String name ;
+  String title ;
+
+
+
+  Future<StoriesResponse> _response;
 
   @override
   void initState() {
-    _letters.add(Letter(areaId: 1, name: "أ"));
-    _letters.add(Letter(areaId: 2, name: "ب"));
-    _letters.add(Letter(areaId: 3, name: "ت"));
-    _letters.add(Letter(areaId: 4, name: "أ"));
-    _letters.add(Letter(areaId: 5, name: "س"));
-    _letters.add(Letter(areaId: 6, name: "ض"));
-    _letters.add(Letter(areaId: 7, name: "ص"));
-    _letters.add(Letter(areaId: 8, name: "ث"));
-    _letters.add(Letter(areaId: 9, name: "غ"));
-    _letters.add(Letter(areaId: 10, name: "غ"));
-    _letters.add(Letter(areaId: 11, name: "ن"));
-    _letters.add(Letter(areaId: 12, name: "ؤ"));
+    if(widget.screenType == 1){
+      var obj =  widget.titles.firstWhere((element) => element.id == 'StoriesPlatForm');
+      name =  obj.name.replaceAll(new RegExp(r'(?:[\t ]*(?:\r?\n|\r))+'), ' ') ?? 'لا يوجد نبذة';
+      title =  obj.title.replaceAll(new RegExp(r'(?:[\t ]*(?:\r?\n|\r))+'), ' ') ?? 'لا يوجد عنوان';
 
-    _searchType.add(Letter(areaId: 1, name: "الحرف"));
-    _searchType.add(Letter(areaId: 2, name: "الإسم"));
-    _searchType.add(Letter(areaId: 3, name: "النوع"));
-    _searchType.add(Letter(areaId: 4, name: "الأكثر قراءة"));
+    }else if(widget.screenType == 2){
+      var obj = widget.titles.firstWhere((element) => element.id == 'HeritagePlatform');
+      name = obj.name.replaceAll(new RegExp(r'(?:[\t ]*(?:\r?\n|\r))+'), ' ')  ?? 'لا يوجد نبذة';
+      title = obj.title.replaceAll(new RegExp(r'(?:[\t ]*(?:\r?\n|\r))+'), ' ')  ?? 'لا يوجد عنوان';
+    }
+
+    if(widget.screenType == 1){
+      _response =  RepositoryProvider.of<PortalRepository>(context).getStoriesForHome(context);
+    }else if(widget.screenType == 2){
+      _response =  RepositoryProvider.of<PortalRepository>(context).getHeritageForHome(context);
+    }
+    else if(widget.screenType == 3){
+    }
+
     super.initState();
+  }
+
+
+  Future<StoriesResponse> _getData(String a){
+
+      if(a == null){
+        if(widget.screenType == 1){
+          _response =  RepositoryProvider.of<PortalRepository>(context).getStoriesForHome(context);
+        }else if(widget.screenType == 2){
+          _response =  RepositoryProvider.of<PortalRepository>(context).getHeritageForHome(context);
+        }
+
+      }else{
+        if(widget.screenType == 1){
+          _response =  RepositoryProvider.of<PortalRepository>(context).getStoriesQ(context, a);
+        }else if(widget.screenType == 2){
+          _response =  RepositoryProvider.of<PortalRepository>(context).getHeritageQ(context, a);
+        }
+
+      }
+
   }
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: myAppBar(context: context),
+      appBar: Common().myAppBar(context: context),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -55,46 +96,84 @@ class _StoryPlatformScreenState extends State<StoryPlatformScreen > {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("المنصة القصصية", style: TextStyle(color: Theme.of(context).accentColor, fontWeight: FontWeight.bold, fontSize: 16.0),),
-                  Text(widget.title , style: TextStyle(color: AppColors.TextColorPrimary, fontSize: 13.0),),
+                  SizedBox(height: 15,),
+                  Text(title, style: TextStyle(color: Theme.of(context).accentColor, fontWeight: FontWeight.bold, fontSize: 16.0),),
+                  SizedBox(height: 10,),
+                  Text(name , style: TextStyle(color: AppColors.TextColorPrimary, fontSize: 13.0),),
                 ],
               ),
             ),
             searchBox(),
             SizedBox(height: 15.0,),
-            header(title: 'قصص الأطفال'),
-            GridView.extent(
-              maxCrossAxisExtent: 200,
-              primary: false,
-                shrinkWrap: true,
-                childAspectRatio: 7.5 / 9.0,
-                physics: NeverScrollableScrollPhysics(),
-                children: [
-                  StoryListItem(),
-                  StoryListItem(),
-                  StoryListItem(),
-                  StoryListItem(),
-                  StoryListItem(),
-                ],
+            FutureBuilder<StoriesResponse>(
+              future: _response,
+              builder: (context, snapshot) {
+                if(snapshot.connectionState == ConnectionState.waiting){
+                  return CircularProgressIndicator();
+                }
+                if(snapshot.hasData){
+                  final data = snapshot.data.stories ;
+                  if(data.length > 0){
+                    return Column(
+                      children: [
+                        ...groupBy(data, (obj) => obj.type).entries.map(
+                                (items) => categoriesList(items.value)).toList()
+                      ],
+                    );
+                  }
+                }
+                return Container();
+              },
             ),
-            header(title: 'قصص الأجداد'),
-            GridView.extent(
-              maxCrossAxisExtent: 200,
-              primary: false,
-              shrinkWrap: true,
-              childAspectRatio: 7.5 / 9.0,
-              physics: NeverScrollableScrollPhysics(),
-              children: [
-                StoryListItem(),
-                StoryListItem(),
-                StoryListItem(),
-                StoryListItem(),
-                StoryListItem(),
-              ],
-            )
           ],
         ),
       )
+    );
+  }
+
+  Widget categoriesList(List<Story> stories){
+    return Column(
+      children: [
+        header(title: stories[0].typeTxt),
+        if(stories[0].type != "11")
+        GridView.extent(
+          maxCrossAxisExtent: 200,
+          primary: false,
+          shrinkWrap: true,
+          childAspectRatio: 0.78,
+          physics: NeverScrollableScrollPhysics(),
+          children: [
+            ...stories.map((e) => widget.screenType == 1 ? StoryListItem(story: e) : HeritageListItem(story: e,))
+          ],
+        ),
+        if(stories[0].type == "11")
+        ListView(
+          primary: false,
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+          children: [
+            ...stories.map((e) =>  MusicListItem(story: e,))
+          ],
+        ),
+        if(stories[0].type != "11")
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Expanded(child: Divider(height: 1, color: Colors.black12,)),
+            SizedBox(width: 12,),
+            InkWell(
+                onTap: (){
+                  Navigator.push(context, MaterialPageRoute(
+                    builder: (context) => StoryCataScreen(typeId: stories[0].type, titles: widget.titles, typeTxt: stories[0].typeTxt, screenType: widget.screenType,),
+                  ));
+                },
+                child: Text("عرض المزيد")),
+            SizedBox(width: 12,),
+            Expanded(child: Divider(height: 1, color: Colors.black12,))
+          ],
+        ),
+        SizedBox(height: 10,)
+      ],
     );
   }
 
@@ -144,25 +223,25 @@ class _StoryPlatformScreenState extends State<StoryPlatformScreen > {
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(5),
                           border: Border.all(color: Colors.grey[300])),
-                      child: DropdownButton<int>(
+                      child: DropdownButton<String>(
                         hint: Text(
                           "إختر",
                           style: TextStyle(fontFamily: 'Coconnext', color: Colors.grey[500], fontSize: 12,),
                         ),
-                        value: _letterId,
+                        value: _searchTypeId,
                         isExpanded: true,
                         underline: Container(),
                         items: _searchType
                             .map((e) =>
-                            DropdownMenuItem<int>(
+                            DropdownMenuItem<String>(
                               child: Text(
                                 e.name,
                                 style: TextStyle(fontFamily: 'Coconnext', fontSize: 12, fontWeight: FontWeight.bold),
                               ),
-                              value: e.areaId,
+                              value: e.name,
                             )).toList(),
                         onChanged: (value) {
-                          this._letterId = value;
+                          this._searchTypeId = value;
                           setState(() {});
                         },
                       ),
@@ -188,7 +267,7 @@ class _StoryPlatformScreenState extends State<StoryPlatformScreen > {
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(5),
                             border: Border.all(color: Colors.grey[300])),
-                        child: DropdownButton<int>(
+                        child: DropdownButton<String>(
                           hint: Text(
                             "إختر",
                             style: TextStyle(fontFamily: 'Coconnext', color: Colors.grey[500], fontSize: 12,),
@@ -198,16 +277,19 @@ class _StoryPlatformScreenState extends State<StoryPlatformScreen > {
                           underline: Container(),
                           items: _letters
                               .map((e) =>
-                              DropdownMenuItem<int>(
+                              DropdownMenuItem<String>(
                                 child: Text(
                                   e.name,
                                   style: TextStyle(fontFamily: 'Coconnext', fontSize: 12, fontWeight: FontWeight.bold),
                                 ),
-                                value: e.areaId,
+                                value: e.name,
                               )).toList(),
-                          onChanged: (value) {
+                          onChanged: (value) async {
                             this._letterId = value;
-                            setState(() {});
+                          // _getData(this._letterId);
+                            setState(() {
+                             // _getData(this._letterId);
+                            });
                           },
                         ),
                       );
@@ -220,14 +302,5 @@ class _StoryPlatformScreenState extends State<StoryPlatformScreen > {
       ),
     );
   }
-
-}
-
-
-class Letter {
-  int areaId;
-  String name;
-
-  Letter({this.areaId, this.name});
 
 }

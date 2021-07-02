@@ -6,7 +6,6 @@ part 'settings_response.g.dart';
 class SettingsResponse {
   @JsonKey(name: 'ID')
   String id;
-
   @JsonKey(name: 'SiteName')
   String siteName;
   @JsonKey(name: 'Email')

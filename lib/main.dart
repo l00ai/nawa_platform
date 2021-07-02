@@ -7,6 +7,7 @@ import 'package:nawa_platform/repository/portal_repository.dart';
 import 'package:nawa_platform/ui/screen/home_screen.dart';
 import 'package:nawa_platform/ui/screen/splash_screen.dart';
 import 'package:logging/logging.dart';
+import 'package:nawa_platform/ui/widgets/reload_indicator.dart';
 import 'package:provider/provider.dart';
 
 
@@ -44,6 +45,12 @@ class MyApp extends StatelessWidget {
         child: MaterialApp(
           title: 'جمعية نوى',
           theme: ThemeData(
+            pageTransitionsTheme: PageTransitionsTheme(
+                builders: {
+                  TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+                  TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+                }
+            ),
             primarySwatch: Colors.blue,
             accentColor: Color(0xff930708),
             primaryColor: Colors.white,
@@ -62,6 +69,12 @@ class MyApp extends StatelessWidget {
           home:
           BlocBuilder<AuthenticationBloc, AuthenticationState>(
             builder: (context, state) {
+
+              void reload() {
+                BlocProvider.of<AuthenticationBloc>(context)
+                    .add(AppLoaded(context: context));
+              }
+
               if (state is AuthenticationAuthenticated) {
                 return HomeScreen(titles: state.titles,);
               }
@@ -70,6 +83,9 @@ class MyApp extends StatelessWidget {
                 return SplashScreen(titles: state.titles,);
              }
 
+              if(state is AuthenticationFailure){
+                return Scaffold(body: ReloadIndicator(context: context, msg: state.message, reload: reload,));
+              }
               return Scaffold(
                 body: Center(
                   child: CircularProgressIndicator(),

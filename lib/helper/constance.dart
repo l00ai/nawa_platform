@@ -7,4 +7,7 @@ class Constance {
   static const SettingsPointUrl = '/Settings';
   static const SliderEndPointUrl = '/Slider';
   static const StoriesEndPointUrl = '/Stories';
+  static const HeritageEndPointUrl = '/Heritage';
+  static const Subscriptions = '/Subscriptions';
+  static const NeedHelp = '/NeedHelp';
 }

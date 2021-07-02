@@ -14,8 +14,10 @@ class Title{
   String img ;
   @JsonKey(name: 'UserID')
   String userId ;
+  @JsonKey(name: 'TypeID')
+  String typeID ;
 
-  Title({this.name, this.img, this.id, this.userId, this.title});
+  Title({this.name, this.img, this.id, this.userId, this.title, this.typeID});
 
   factory Title.fromJson(Map<String, dynamic> json) =>
       _$TitleFromJson(json);

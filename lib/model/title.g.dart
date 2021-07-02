@@ -13,6 +13,7 @@ Title _$TitleFromJson(Map<String, dynamic> json) {
     id: json['ID'] as String,
     userId: json['UserID'] as String,
     title: json['Title'] as String,
+    typeID: json['TypeID'] as String,
   );
 }
 
@@ -22,4 +23,5 @@ Map<String, dynamic> _$TitleToJson(Title instance) => <String, dynamic>{
       'Title': instance.title,
       'Img': instance.img,
       'UserID': instance.userId,
+      'TypeID': instance.typeID,
     };

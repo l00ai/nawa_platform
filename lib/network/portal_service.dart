@@ -34,6 +34,21 @@ abstract class PortalService extends ChopperService {
   @Get(path: Constance.StoriesEndPointUrl)
   Future<Response<StoriesResponse>> getStoriesForHome({@Query("ShowInHome") String showInHome = '1'});
 
+  @Get(path: Constance.HeritageEndPointUrl)
+  Future<Response<StoriesResponse>> getHeritageAsType(@Query("Type") String typeId);
+
+  @Get(path: Constance.HeritageEndPointUrl)
+  Future<Response<StoriesResponse>> getHeritageQ(@Query("q") String q);
+
+  @Get(path: Constance.HeritageEndPointUrl)
+  Future<Response<StoriesResponse>> getHeritageForHome({@Query("ShowInHome") String showInHome = '1'});
+
+  @Post(path: Constance.Subscriptions)
+  Future<Response<String>> subscriptions(@Body() Map<String, dynamic> body);
+
+  @Post(path: Constance.NeedHelp)
+  Future<Response<String>> needHelp(@Body() Map<String, dynamic> body);
+
 
   static PortalService create() {
     final client = ChopperClient(
