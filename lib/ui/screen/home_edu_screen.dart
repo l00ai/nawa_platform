@@ -81,9 +81,10 @@ class __BodyState extends State<_Body> {
       borderRadius: BorderRadius.circular(13),
       onTap: () {
         if(type == "HeritagePlatform"){
-          Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => EduSubscribeScreen(),
-          ));
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("سيتوفر قريباً"),));
+          // Navigator.of(context).push(MaterialPageRoute(
+          //   builder: (context) => EduSubscribeScreen(),
+          // ));
         }else if(type == "StoriesPlatForm"){
           Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => SchoolCurriculum(titles: widget.titles,),
