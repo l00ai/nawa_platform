@@ -31,7 +31,6 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return Provider(
@@ -43,7 +42,7 @@ class MyApp extends StatelessWidget {
             return AuthenticationBloc(portalService)..add(AppLoaded(context: context));
           },
         child: MaterialApp(
-          title: 'جمعية نوى',
+          title: 'منصة النوى',
           theme: ThemeData(
             pageTransitionsTheme: PageTransitionsTheme(
                 builders: {

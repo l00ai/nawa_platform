@@ -9,8 +9,6 @@ class AppColors {
   static const SmileIconColor = Color(0xFFB3B3B3);
   static const bgEditTextColor = Color(0xFFF3F3F3);
 
-
-
   static const bgSplashScreenColor =Color(0xFFF1F1F1);
   static const bgMainScreenColor = Color(0xFFF9F9F9);
   static const TextColorPrimary = Color(0xFF565656);
@@ -21,7 +19,6 @@ class AppColors {
   static const TextColorDrawer = Color(0xFF4D4C4C);
   static const bgMusicTileColor = Color(0xFFFCEEC9);
   static const bgSchoolCurriculumCardColor = Color(0xFFFCF8EE);
-
 
   static const GradientColor_1 = Color(0xFF666666);
   static const GradientColor_2 = Color(0xFF4D4D4D);

@@ -36,38 +36,4 @@ class UserPreferences {
     }
   }
 
-  // Future<User> getUser() async {
-  //   final SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   String user = prefs.getString("user");
-  //   if(user == null){
-  //     return null ;
-  //   }else{
-  //     print(json.decode(user));
-  //     return User.fromJson(json.decode(user));
-  //   }
-  // }
-
-  // Future<void> removeUser() async {
-  //   final SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   await prefs.remove("token");
-  //   await prefs.remove("user");
-  // }
-  //
-  // Future<String> getToken() async {
-  //   final SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   String token = prefs.getString("token");
-  //   return token;
-  // }
-
-  // Future<String> getName(args) async {
-  //   final SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   String name = prefs.getString("name");
-  //   return name;
-  // }
-
-  // Future<String> getPhone(args) async {
-  //   final SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   String phone = prefs.getString("phone");
-  //   return phone;
-  // }
 }
